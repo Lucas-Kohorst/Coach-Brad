@@ -4,6 +4,7 @@
 // the link to your model provided by Teachable Machine export panel
 const URL = "https://teachablemachine.withgoogle.com/models/_aMgfsAB/";
 let model, webcam, ctx, labelContainer, maxPredictions;
+var i = 0;
 
 async function init() {
     const modelURL = URL + "model.json";
@@ -16,9 +17,9 @@ async function init() {
 
     // Convenience function to setup a webcam
     const flip = false; // whether to flip the webcam
-    webcam = new tmPose.Webcam(500, 500, flip); // width, height, flip
-    await webcam.setup(); // request access to the webcam
-    webcam.play();
+    window.webcam = new tmPose.Webcam(500, 500, flip); // width, height, flip
+    await window.webcam.setup(); // request access to the webcam
+    window.webcam.play();
     window.requestAnimationFrame(loop);
 
     // append/get elements to the DOM
@@ -34,15 +35,19 @@ async function init() {
 }
 
 async function loop(timestamp) {
-    webcam.update(); // update the webcam frame
+    window.webcam.update(); // update the webcam frame
     await predict();
+    window.webcam.canvas.toDataURL();
+    i++;
     window.requestAnimationFrame(loop);
 }
 
 async function predict() {
     // Prediction #1: run input through posenet
     // estimatePose can take in an image, video or canvas html element
-    const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
+    const { pose, posenetOutput } = await model.estimatePose(
+        window.webcam.canvas
+    );
     // Prediction 2: run input through teachable machine classification model
     const prediction = await model.predict(posenetOutput);
 
@@ -57,7 +62,7 @@ async function predict() {
 }
 
 function drawPose(pose) {
-    ctx.drawImage(webcam.canvas, 0, 0);
+    ctx.drawImage(window.webcam.canvas, 0, 0);
     // draw the keypoints and skeleton
     if (pose) {
         const minPartConfidence = 0.5;
