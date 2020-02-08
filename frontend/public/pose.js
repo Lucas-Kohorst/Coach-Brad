@@ -16,7 +16,7 @@ async function init() {
 
     // Convenience function to setup a webcam
     const flip = false; // whether to flip the webcam
-    webcam = new tmPose.Webcam(500, 500, flip); // width, height, flip
+    webcam = new tmPose.Webcam(500, 500); // width, height, flip
     await webcam.setup(); // request access to the webcam
     webcam.play();
     window.requestAnimationFrame(loop);
