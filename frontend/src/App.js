@@ -1,19 +1,21 @@
 import React from "react";
 import "./App.css";
 import VideoRecorder from "react-video-recorder";
-import Button from 'react-bootstrap/Button';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import Button from "react-bootstrap/Button";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 class App extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
   }
 
   componentDidMount = () => {
     setTimeout(function() {
-      console.log(window.webcam.canvas.toDataURL())
+      setInterval(function() {
+        console.log(window.webcam.canvas.toDataURL());
+      }, 3000);
     }, 3000);
-  } 
+  };
 
   render() {
     return (
@@ -79,7 +81,7 @@ class App extends React.Component {
         {/* <h1 style={{ color: "white" }}>{JSON.stringify(window.webcam)}</h1> */}
       </React.Fragment>
     );
-  };
+  }
 }
 
 export default App;
