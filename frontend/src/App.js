@@ -1,21 +1,52 @@
 import React from "react";
 import "./App.css";
-import VideoRecorder from "react-video-recorder";
-import Button from "react-bootstrap/Button";
+import { Button } from 'reactstrap';
 import "bootstrap/dist/css/bootstrap.min.css";
 
 class App extends React.Component {
+
   constructor(props) {
     super(props);
+    this.state = {
+      flag: false,
+      frames: [],
+    };
+    this.intervalID = 0;
+  }
+
+  getFrame() {
+    console.log("gotFrame");
+    var url = window.webcam.canvas.toDataURL();
+    this.setState({
+      flag: this.state.flag,
+      frames: this.state.frames.push(url)
+    });
+    console.log(this.state.frames);
+  }
+
+  start () {
+    console.log("start");
+    this.intervalID = setInterval(this.getFrame, 50);
+  }
+
+  stop = () => {
+    window.clearInterval(this.start);
   }
 
   componentDidMount = () => {
     setTimeout(function() {
       setInterval(function() {
-        console.log(window.webcam.canvas.toDataURL());
+        //console.log(window.webcam.canvas.toDataURL());
       }, 3000);
     }, 3000);
   };
+
+  handleClick = () => {
+    this.setState({
+      flag: !this.state.flag,
+      frames: this.state.frames
+    });
+  }
 
   render() {
     return (
@@ -49,6 +80,14 @@ class App extends React.Component {
             id="label-container"
             style={{ color: "white", paddingTop: "20vh", paddingLeft: "1em" }}
           ></div>
+        </div>
+        <div className="text-center">
+        <Button variant="success" onClick={this.start}>
+          Start
+        </Button>
+        <Button variant="danger" onClick={this.stop}>
+          Stop
+        </Button>
         </div>
       </React.Fragment>
     );
