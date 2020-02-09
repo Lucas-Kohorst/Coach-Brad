@@ -2,7 +2,7 @@ import React from "react";
 import Gallery from "./components/Gallery"
 
 class ViewHome extends React.Component {
-    constructor(props) {
+    constructor(props, galleryArray) {
       super(props);
       this.state = {galleryArray: [<Gallery/>, <Gallery/>]}
     }
@@ -15,7 +15,22 @@ class ViewHome extends React.Component {
             <li>{forGal}</li>);
         return (
             <React.Fragment>
-            <ul>{temp}</ul>
+            <h1 style={{ color: "white", textAlign: "center" }}>Gallery</h1>
+        <div
+          className="App App-header"
+          padding="100px"
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            backgroundColor: "#282c34"
+          }}
+          id="wrapper"
+        >
+        
+        <ul>{temp}</ul>
+        </div>
+            
             </React.Fragment>
         )
     }

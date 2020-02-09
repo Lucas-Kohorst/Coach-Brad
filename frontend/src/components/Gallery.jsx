@@ -29,7 +29,7 @@ export default class Gallery extends Component {
     const { photoIndex, isOpen } = this.state;
  
     return (
-      <div>
+      <div style={{ padding: "1em" }}>
         <button type="button" onClick={() => this.setState({ isOpen: true })}>
         <img src={img1}  onClick={this.myfunction}/>
         </button>
