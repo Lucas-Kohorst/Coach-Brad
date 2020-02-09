@@ -4,177 +4,22 @@ import { Button } from "reactstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import firebase from "./utils/firebase";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Home from './Home';
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      frames: [],
-      predictionData: [],
-      db: firebase.firestore(),
-      storageRef: firebase.storage().ref()
-    };
-  }
-
-  getFrame = async state => {
-    var url = window.ctx.canvas.toDataURL();
-    var canvas = window.webcam.canvas;
-    var predictionDataLocal = this.state.predictionData;
-    predictionDataLocal.push({ url: url, canvas: canvas });
-    this.setState({
-      predictionData: predictionDataLocal
-    });
-  };
-
-  start = state => {
-    window.intervalID = setInterval(() => {
-      this.getFrame(this.state);
-    }, 500);
-  };
-
-  stop = async state => {
-    window.clearInterval(window.intervalID);
-    var predictionDataLocal = this.state.predictionData;
-    var predictions = [];
-    for (var elm in predictionDataLocal) {
-      var prediction = await window.getModelsPredictions(
-        predictionDataLocal[elm].canvas
-      );
-      var ref = this.state.storageRef.child(
-        "poses/image" + Date.now() + Math.random() + elm
-      );
-      ref
-        .putString(predictionDataLocal[elm].url, "data_url")
-        .then(function(snapshot) {
-          var pathToImage = snapshot.metadata.fullPath;
-          return pathToImage;
-        })
-        .then(pathToImage => {
-          console.log(pathToImage);
-          predictions.push({
-            img: pathToImage,
-            prediction: prediction
-          });
-        });
-    }
-    this.writeToDB(predictions);
-    // var framesLocal = this.state.frames;
-    // console.log(framesLocal)
-    // framesLocal = [];
-    // this.setState({
-    //   frames: framesLocal
-    // });
-  };
-
-  // Writes to DB and returns ID of upload
-  writeToDB = async images => {
-
-    await this.state.db
-      .collection("Poses")
-      .add({ images })
-      .then(value => {
-        console.log(value.id);
-        return value.id;
-      });
-  };
-
-  // Gets all data from db
-  getAllData = () => {
-    this.state.db
-      .collection("Poses")
-      .get()
-      .then(querySnapshot => {
-        const data = querySnapshot.docs.map(doc => doc.data());
-        // console.log(data);
-      });
-  };
-
-  // gets data by ID
-  getById = id => {
-    this.state.db
-      .collection("Poses")
-      .doc(id)
-      .get()
-      .then(doc => {
-        const data = doc.data();
-        console.log(data);
-      });
-  };
-
-  handleClick = url => {
-    window.URL = url;
-    window.init();
-  };
-
   render() {
     return (
-      <React.Fragment>
-        <div className="App App-header" id="wrapper">
-          <p> Coach Brad </p>{" "}
-          <a
-            className="App-link"
-            href="https://github.com/Lucas-Kohorst/Coach-Brad"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Github{" "}
-          </a>{" "}
-        </div>{" "}
-        <h1 style={{ color: "white", textAlign: "center" }}>
-          {" "}
-          Real Time Test{" "}
-        </h1>{" "}
-        <div
-          className="App App-header"
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-            backgroundColor: "#282c34"
-          }}
-          id="wrapper"
-        >
-          <div>
-            <canvas id="canvas"> </canvas>{" "}
-          </div>{" "}
-          <div
-            id="label-container"
-            style={{ color: "white", paddingTop: "20vh", paddingLeft: "1em" }}
-          ></div>{" "}
-        </div>{" "}
-        <div className="text-center">
-          <Button variant="success" onClick={() => this.start(this.state)}>
-            Start{" "}
-          </Button>{" "}
-          <Button variant="danger" onClick={() => this.stop(this.state)}>
-            Stop{" "}
-          </Button>{" "}
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <Button
-              className="m-3"
-              onClick={() =>
-                this.handleClick(
-                  "https://teachablemachine.withgoogle.com/models/SrWBV53a/"
-                )
-              }
-            >
-              {" "}
-              Elbow{" "}
-            </Button>{" "}
-            <Button
-              className="m-3"
-              onClick={() =>
-                this.handleClick(
-                  "https://teachablemachine.withgoogle.com/models/kE9ERP1y/"
-                )
-              }
-            >
-              {" "}
-              Legs{" "}
-            </Button>{" "}
-          </div>{" "}
-        </div>{" "}
-      </React.Fragment>
+      <Router>
+        <Switch>
+          <Route path="/">
+            <Home />
+          </Route>
+          <Route path="/gallery">
+            <Home />
+          </Route>
+        </Switch>
+      </Router>
     );
   }
 }
