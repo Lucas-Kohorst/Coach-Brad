@@ -4,6 +4,7 @@ import { Button } from "reactstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import firebase from "./utils/firebase";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Async from "react-promise";
 
 class Home extends React.Component {
   constructor(props) {
@@ -13,13 +14,14 @@ class Home extends React.Component {
       predictionData: [],
       db: firebase.firestore(),
       storageRef: firebase.storage().ref(),
-      hash: null
+      hash: null,
+      url: ""
     };
   }
 
   componentDidMount = () => {
-     this.getAllData();
-  }
+    this.getAllData();
+  };
 
   getFrame = async state => {
     var url = window.ctx.canvas.toDataURL();
@@ -106,39 +108,48 @@ class Home extends React.Component {
   };
 
   getAllStoredImages = () => {
-     var projectRef = firebase.storage().ref("poses");
-     var images = [];
-     projectRef.listAll().then(function(result) {
-        console.log(result)
-        for (var i in result.items) {
-         images.push(result.items[i].fullPath)
-        }
-     });
-     console.log(images)
-  }
+    var projectRef = firebase.storage().ref("poses");
+    var images = [];
+    projectRef.listAll().then(function(result) {
+      console.log(result);
+      for (var i in result.items) {
+        images.push(result.items[i].fullPath);
+      }
+    });
+    console.log(images);
+  };
 
-  getDataFromImage
+  getDataFromImage;
 
-  displayImageFromPath
+  displayImageFromPath = async path => {
+    var ref = this.state.storageRef.child(path);
+    console.log(ref);
+    ref.getDownloadURL().then(function(url) {
+      console.log(url);
+      return (
+         <img src={}
+      )
+    });
+  };
 
-  getImageFromData = async (hash) => {
-   let snapshot = await this.state.db
-      .collection('Poses')
+  getImageFromData = async hash => {
+    this.state.db
+      .collection("Poses")
       .doc(hash)
       .get()
       .then(doc => {
-     if (!doc.exists) {
-       console.log("No such document!");
-     } else {
-       console.log("Document data:", doc.data());
-     }
-   });
-  }
+        if (!doc.exists) {
+          console.log("No such document!");
+        } else {
+          console.log("Document data:", doc.data());
+        }
+      });
+  };
 
   componentWillMount = () => {
-     this.getImageFromData('07xbX8MnfKNUv7gLTW2M');
-     this.getAllData();
-  }
+    this.getImageFromData("07xbX8MnfKNUv7gLTW2M");
+    this.getAllData();
+  };
 
   handleClick = url => {
     window.URL = url;
@@ -146,7 +157,7 @@ class Home extends React.Component {
   };
 
   displayGallery = () => {
-     console.log(true)
+    console.log(true);
   };
 
   render() {
@@ -163,6 +174,9 @@ class Home extends React.Component {
             Github{" "}
           </a>{" "}
         </div>{" "}
+        {this.displayImageFromPath(
+          "poses/image15812423341210.6006357473938830"
+        )}
         <h1 style={{ color: "white", textAlign: "center" }}>
           {" "}
           Analyze your shot{" "}
@@ -196,6 +210,9 @@ class Home extends React.Component {
             </div>
           </div>
         </div>{" "}
+        <div>
+          <img src={this.state.url} />
+        </div>
         <div className="text-center">
           <Button variant="success" onClick={() => this.start(this.state)}>
             Start{" "}
