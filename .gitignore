@@ -106,3 +106,4 @@ frontend/yarn.lock
 frontend/build/
 
 /data
+frontend/package-lock.json
