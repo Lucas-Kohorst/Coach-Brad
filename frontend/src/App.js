@@ -2,6 +2,7 @@ import React from "react";
 import "./App.css";
 import VideoRecorder from "react-video-recorder";
 import Button from "react-bootstrap/Button";
+import Gallery from "./components/Gallery"
 import "bootstrap/dist/css/bootstrap.min.css";
 
 class App extends React.Component {
@@ -42,7 +43,6 @@ class App extends React.Component {
           }}
           id="wrapper"
         >
-          <Gallery/>
           <div>
             <canvas id="canvas"></canvas>
           </div>
