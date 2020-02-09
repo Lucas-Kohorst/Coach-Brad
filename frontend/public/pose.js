@@ -22,30 +22,30 @@ window.getModelsPredictions = async function getModelsPredictions() {
 
     // Prediction #1: run input through posenet
     // estimatePose can take in an image, video or canvas html element
-    const { pose1, posenetOutput1 } = await model1.estimatePose(
+    var { pose, posenetOutput } = await model1.estimatePose(
         window.webcam.canvas
     );
     // Prediction 2: run input through teachable machine classification model
     //console.log(posenetOutput);
-    console.log(posenetOutput1)
-    const prediction1 = await model1.predict(posenetOutput1);
+    console.log(posenetOutput)
+    const prediction1 = await model1.predict(posenetOutput);
     console.log(prediction1);
 
     // Prediction #1: run input through posenet
     // estimatePose can take in an image, video or canvas html element
-    const { pose2, posenetOutput2 } = await model2.estimatePose(
+    var { pose, posenetOutput } = await model2.estimatePose(
         window.webcam.canvas
     );
     // Prediction 2: run input through teachable machine classification model
     //console.log(posenetOutput);
-    const prediction2 = await model2.predict(posenetOutput2);
+    const prediction2 = await model2.predict(posenetOutput);
     console.log(prediction2)
     console.log(
-        prediction1[0].probability.toFixed(2) + "/n" +
-        prediction1[1].probability.toFixed(2) + "/n" +
-        prediction1[2].probability.toFixed(2) + "/n" +
-        prediction2[0].probability.toFixed(2) + "/n" +
-        prediction2[1].probability.toFixed(2) + "/n" +
+        prediction1[0].probability.toFixed(2) + "\n" +
+        prediction1[1].probability.toFixed(2) + "\n" +
+        prediction1[2].probability.toFixed(2) + "\n" +
+        prediction2[0].probability.toFixed(2) + "\n" +
+        prediction2[1].probability.toFixed(2) + "\n" +
         prediction2[2].probability.toFixed(2)
     );
     return {
