@@ -16,7 +16,7 @@ window.init = async function init() {
     maxPredictions = model.getTotalClasses();
 
     // Convenience function to setup a webcam
-    const flip = false; // whether to flip the webcam
+    const flip = true; // whether to flip the webcam
     window.webcam = new tmPose.Webcam(500, 500, flip); // width, height, flip
     await window.webcam.setup(); // request access to the webcam
     window.webcam.play();
