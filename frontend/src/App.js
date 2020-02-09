@@ -116,6 +116,7 @@ class App extends React.Component {
           <Button className="m-3" onClick={() => this.handleClick("https://teachablemachine.withgoogle.com/models/SrWBV53a/")}>Elbow</Button>
           <Button className="m-3" onClick={() => this.handleClick("https://teachablemachine.withgoogle.com/models/kE9ERP1y/")}>Legs</Button>
         </div>
+        </div>
       </React.Fragment>
     );
   }
