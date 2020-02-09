@@ -2,6 +2,8 @@ import React from "react";
 import "./App.css";
 import { Button } from 'reactstrap';
 import "bootstrap/dist/css/bootstrap.min.css";
+import firebase from "./utils/firebase";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 class App extends React.Component {
 
@@ -10,6 +12,7 @@ class App extends React.Component {
     this.state = {
       flag: false,
       frames: [],
+      db: firebase.firestore()
     };
   }
 
@@ -32,11 +35,41 @@ class App extends React.Component {
     window.clearInterval(window.intervalID);
   }
 
-  handleClick = () => {
-    this.setState({
-      flag: !this.state.flag,
-      frames: this.state.frames
-    });
+  // Writes to DB and returns ID of upload
+  writeToDB = images => {
+    this.state.db.collection("Poses").add({
+      images: images
+    }).then(value => {
+      return value.id;
+    })
+  };
+
+  // Gets all data from db
+  getAllData = () => {
+    this.state.db
+      .collection("Poses")
+      .get()
+      .then(querySnapshot => {
+        const data = querySnapshot.docs.map(doc => doc.data());
+        console.log(data);
+      });
+  };
+
+  // gets data by ID
+  getById = id => {
+    this.state.db
+      .collection("Poses")
+      .doc(id)
+      .get()
+      .then(doc => {
+        const data = doc.data();
+        console.log(data);
+      });
+  };
+
+  handleClick = (url) => {
+    window.URL = url;
+    window.init();
   }
 
   render() {
@@ -79,6 +112,9 @@ class App extends React.Component {
         <Button variant="danger" onClick={() => this.stop(this.state)}>
           Stop
         </Button>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Button className="m-3" onClick={() => this.handleClick("https://teachablemachine.withgoogle.com/models/SrWBV53a/")}>Elbow</Button>
+          <Button className="m-3" onClick={() => this.handleClick("https://teachablemachine.withgoogle.com/models/kE9ERP1y/")}>Legs</Button>
         </div>
       </React.Fragment>
     );
