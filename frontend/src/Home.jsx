@@ -1,12 +1,11 @@
-import React from "react";
+import React, { Image } from "react";
 import "./App.css";
 import { Button } from "reactstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import firebase from "./utils/firebase";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Async from "react-promise";
 
-class Home extends React.Component {
+export default class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -121,15 +120,18 @@ class Home extends React.Component {
 
   getDataFromImage;
 
-  displayImageFromPath = async path => {
+  displayImageFromPath = path => {
     var ref = this.state.storageRef.child(path);
     console.log(ref);
     ref.getDownloadURL().then(function(url) {
       console.log(url);
-      return (
-         <img src={}
-      )
+      return url
     });
+  };
+
+  componentWillMount = () => {
+   var u = this.displayImageFromPath("poses/image15812423341210.6006357473938830");
+   console.log(u)
   };
 
   getImageFromData = async hash => {
@@ -144,11 +146,6 @@ class Home extends React.Component {
           console.log("Document data:", doc.data());
         }
       });
-  };
-
-  componentWillMount = () => {
-    this.getImageFromData("07xbX8MnfKNUv7gLTW2M");
-    this.getAllData();
   };
 
   handleClick = url => {
@@ -174,13 +171,11 @@ class Home extends React.Component {
             Github{" "}
           </a>{" "}
         </div>{" "}
-        {this.displayImageFromPath(
-          "poses/image15812423341210.6006357473938830"
-        )}
         <h1 style={{ color: "white", textAlign: "center" }}>
           {" "}
           Analyze your shot{" "}
         </h1>{" "}
+        <img src={this.state.url} alt=""/>
         <div
           className="App App-header"
           style={{
@@ -197,7 +192,11 @@ class Home extends React.Component {
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div
               id="label-container"
-              style={{ color: "white", paddingTop: "20vh", paddingLeft: "1em" }}
+              style={{
+                color: "white",
+                paddingTop: "20vh",
+                paddingLeft: "1em"
+              }}
             ></div>{" "}
             <div>
               {this.state.hash != "" && this.state.hash ? (
@@ -249,5 +248,3 @@ class Home extends React.Component {
     );
   }
 }
-
-export default Home;
