@@ -15,13 +15,12 @@ class App extends React.Component {
     };
   }
 
-  getFrame = state => {
+  getFrame = async state => {
     var url = window.ctx.canvas.toDataURL();
-    var posenetOutput = window.posenetOutputObject;
-    posenetOutput.posenetOutput = JSON.stringify(eval("(" + JSON.stringify(posenetOutput.posenetOutput) + ")"));
-    console.log(posenetOutput.posenetOutput);
     var framesLocal = state.frames;
-    framesLocal.push({url: url, posenetOutput: posenetOutput});
+    var predictionData = await window.getModelsPredictions();
+    console.log(predictionData)
+    framesLocal.push({url: url, prediction: predictionData});
     this.setState({
       frames: framesLocal,
     });
@@ -34,7 +33,7 @@ class App extends React.Component {
 
   stop = (state) => {
     window.clearInterval(window.intervalID);
-    this. writeToDB(state.frames);
+    this.writeToDB(state.frames);
     var framesLocal = state.frames;
     framesLocal = [];
     this.setState({
@@ -43,13 +42,12 @@ class App extends React.Component {
   }
 
   // Writes to DB and returns ID of upload
-  writeToDB = images => {
-    var len = images.length / 3;
-    images = images.splice(0, len);
-    this.state.db.collection("Poses").add(
+  writeToDB = async images => {
+    console.log(images)
+    await this.state.db.collection("Poses").add(
       {images}
     ).then(value => {
-      return value.id;
+     return value.id;
     })
   };
 
