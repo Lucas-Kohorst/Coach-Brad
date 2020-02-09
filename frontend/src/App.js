@@ -16,8 +16,10 @@ class App extends React.Component {
   }
 
   getFrame = state => {
-    var url = window.webcam.canvas.toDataURL();
+    var url = window.ctx.canvas.toDataURL();
     var posenetOutput = window.posenetOutputObject;
+    posenetOutput.posenetOutput = JSON.stringify(eval("(" + JSON.stringify(posenetOutput.posenetOutput) + ")"));
+    console.log(posenetOutput.posenetOutput);
     var framesLocal = state.frames;
     framesLocal.push({url: url, posenetOutput: posenetOutput});
     this.setState({
@@ -42,9 +44,11 @@ class App extends React.Component {
 
   // Writes to DB and returns ID of upload
   writeToDB = images => {
-    this.state.db.collection("Poses").add({
-      images: images
-    }).then(value => {
+    var len = images.length / 3;
+    images = images.splice(0, len);
+    this.state.db.collection("Poses").add(
+      {images}
+    ).then(value => {
       return value.id;
     })
   };

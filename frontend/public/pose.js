@@ -71,6 +71,7 @@ async function predict() {
 }
 
 function drawPose(pose) {
+    window.ctx = ctx
     ctx.drawImage(window.webcam.canvas, 0, 0);
     // draw the keypoints and skeleton
     if (pose) {
