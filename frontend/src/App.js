@@ -3,18 +3,46 @@ import "./App.css";
 import VideoRecorder from "react-video-recorder";
 import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
+import firebase from "./utils/firebase";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      db: firebase.firestore()
+    };
   }
 
-  componentDidMount = () => {
-    setTimeout(function() {
-      setInterval(function() {
-        console.log(window.webcam.canvas.toDataURL());
-      }, 3000);
-    }, 3000);
+  // Writes to DB and returns ID of upload
+  writeToDB = images => {
+    this.state.db.collection("Poses").add({
+      images: images
+    }).then(value => {
+      return value.id;
+    })
+  };
+
+  // Gets all data from db
+  getAllData = () => {
+    this.state.db
+      .collection("Poses")
+      .get()
+      .then(querySnapshot => {
+        const data = querySnapshot.docs.map(doc => doc.data());
+        console.log(data);
+      });
+  };
+
+  // gets data by ID
+  getById = id => {
+    this.state.db
+      .collection("Poses")
+      .doc(id)
+      .get()
+      .then(doc => {
+        const data = doc.data();
+        console.log(data);
+      });
   };
 
   render() {
