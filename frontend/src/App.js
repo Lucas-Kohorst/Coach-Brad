@@ -33,7 +33,7 @@ class App extends React.Component {
 
     stop = (state) => {
         window.clearInterval(window.intervalID);
-        console.log(true);
+        console.log("FRAMES: " + state.frames);
         this.writeToDB(state.frames);
         console.log(true);
         var framesLocal = state.frames;
@@ -47,7 +47,7 @@ class App extends React.Component {
     writeToDB = async images => {
         console.log(true)
         console.log(images)
-        await this.state.db.collection("Poses").add(...images).then(value => {
+        await this.state.db.collection("Poses").add({...images }).then(value => {
             console.log(value.id)
             return value.id;
         })
