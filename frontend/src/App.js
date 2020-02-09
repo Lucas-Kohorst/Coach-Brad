@@ -42,6 +42,7 @@ class App extends React.Component {
           }}
           id="wrapper"
         >
+          <Gallery/>
           <div>
             <canvas id="canvas"></canvas>
           </div>
