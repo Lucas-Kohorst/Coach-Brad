@@ -10,7 +10,6 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      flag: false,
       frames: [],
       db: firebase.firestore()
     };
@@ -18,13 +17,13 @@ class App extends React.Component {
 
   getFrame = state => {
     var url = window.webcam.canvas.toDataURL();
-    var flag = state.flag;
-    console.log(state.frames)
-    var framesLocal = state.frames.push(url)
+    var posenetOutput = window.posenetOutputObject;
+    var framesLocal = state.frames;
+    framesLocal.push({url: url, posenetOutput: posenetOutput});
     this.setState({
-      flag: flag,
       frames: framesLocal,
     });
+    console.log(state.frames);
   }
 
   start = (state) => {
@@ -33,6 +32,12 @@ class App extends React.Component {
 
   stop = (state) => {
     window.clearInterval(window.intervalID);
+    this. writeToDB(state.frames);
+    var framesLocal = state.frames;
+    framesLocal = [];
+    this.setState({
+      frames: framesLocal
+    });
   }
 
   // Writes to DB and returns ID of upload
@@ -51,7 +56,7 @@ class App extends React.Component {
       .get()
       .then(querySnapshot => {
         const data = querySnapshot.docs.map(doc => doc.data());
-        console.log(data);
+        // console.log(data);
       });
   };
 
