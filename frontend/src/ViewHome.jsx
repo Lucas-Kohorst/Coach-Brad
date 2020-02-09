@@ -1,24 +1,27 @@
 import React from "react";
+import "./ViewHome.css";
 import Gallery from "./components/Gallery"
+import locker from "./images/locker-room.jpg"
 
 class ViewHome extends React.Component {
     constructor(props, galleryArray) {
       super(props);
-      this.state = {galleryArray: [<Gallery text={["hi","bye", "yo" ]} />, <Gallery/>]}
+      this.state = {galleryArray: [<Gallery text={["hi","bye", "yo" ]} />, <Gallery/>, <Gallery/>, <Gallery/>, <Gallery/>, <Gallery/>]}
     }
     // this.props.galleryArray = {[[<Gallery tex ]} />, <Gallery/>]]}
 
     
 
     render() {
-      <div>
+        
         const temp = this.state.galleryArray.map((forGal) =>
             <li>{forGal}</li>);
         return (
-            <React.Fragment>
-            <h1 style={{ color: "white", textAlign: "center" }}>The Locker Room</h1>
-        <div
-          className="App App-header"
+        <React.Fragment >
+          <div className="ViewHome">
+            //<h1 style={{ color: "white", textAlign: "center" }}>The Locker Room</h1>
+         <div
+          className="ViewHome"
           padding="100px"
           style={{
             display: "flex",
@@ -28,15 +31,14 @@ class ViewHome extends React.Component {
           }}
           id="wrapper"
         >
-        
         <ul>{temp}</ul>
         </div>
-            
-            </React.Fragment>
+        </div>
+        </React.Fragment>
         )
-      </div>
     }
 
+    
     addGallery(Gallery){
         var tempArray = this.state.galleryArray;
         tempArray.push(Gallery);
