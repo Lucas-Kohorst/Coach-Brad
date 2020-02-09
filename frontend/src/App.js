@@ -10,43 +10,65 @@ class App extends React.Component {
     super(props);
     this.state = {
       frames: [],
-      db: firebase.firestore()
+      predictionData: [],
+      db: firebase.firestore(),
+      storageRef: firebase.storage().ref()
     };
   }
 
   getFrame = async state => {
     var url = window.ctx.canvas.toDataURL();
-    var framesLocal = state.frames;
-    var predictionData = await window.getModelsPredictions();
-    console.log(predictionData);
-    framesLocal.push({ url: url, prediction: predictionData });
+    var canvas = window.webcam.canvas;
+    var predictionDataLocal = this.state.predictionData;
+    predictionDataLocal.push({ url: url, canvas: canvas });
     this.setState({
-      frames: framesLocal
+      predictionData: predictionDataLocal
     });
-    console.log(state.frames);
   };
 
   start = state => {
     window.intervalID = setInterval(() => {
-      this.getFrame(state);
+      this.getFrame(this.state);
     }, 500);
   };
 
-  stop = state => {
+  stop = async state => {
     window.clearInterval(window.intervalID);
-    console.log("FRAMES: " + this.state.frames);
-    this.writeToDB(this.state.frames);
-    console.log(true);
-    var framesLocal = this.state.frames;
-    framesLocal = [];
-    this.setState({
-      frames: framesLocal
-    });
+    var predictionDataLocal = this.state.predictionData;
+    var predictions = [];
+    for (var elm in predictionDataLocal) {
+      var prediction = await window.getModelsPredictions(
+        predictionDataLocal[elm].canvas
+      );
+      var ref = this.state.storageRef.child(
+        "poses/image" + Date.now() + Math.random() + elm
+      );
+      ref
+        .putString(predictionDataLocal[elm].url, "data_url")
+        .then(function(snapshot) {
+          var pathToImage = snapshot.metadata.fullPath;
+          return pathToImage;
+        })
+        .then(pathToImage => {
+          console.log(pathToImage);
+          predictions.push({
+            img: pathToImage,
+            prediction: prediction
+          });
+        });
+    }
+    this.writeToDB(predictions);
+    // var framesLocal = this.state.frames;
+    // console.log(framesLocal)
+    // framesLocal = [];
+    // this.setState({
+    //   frames: framesLocal
+    // });
   };
 
   // Writes to DB and returns ID of upload
   writeToDB = async images => {
-    console.log("IMAGES: "  + images);
+
     await this.state.db
       .collection("Poses")
       .add({ images })

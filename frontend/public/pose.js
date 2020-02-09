@@ -6,7 +6,7 @@ window.URL = "https://teachablemachine.withgoogle.com/models/_aMgfsAB/";
 let model, webcam, ctx, labelContainer, maxPredictions;
 var i = 0;
 
-window.getModelsPredictions = async function getModelsPredictions() {
+window.getModelsPredictions = async function getModelsPredictions(canvas) {
     var URL1 = "https://teachablemachine.withgoogle.com/models/_aMgfsAB/";
     var URL2 = "https://teachablemachine.withgoogle.com/models/SrWBV53a/";
 
@@ -23,7 +23,7 @@ window.getModelsPredictions = async function getModelsPredictions() {
     // Prediction #1: run input through posenet
     // estimatePose can take in an image, video or canvas html element
     var { pose, posenetOutput } = await model1.estimatePose(
-        window.webcam.canvas
+        canvas
     );
     // Prediction 2: run input through teachable machine classification model
     //console.log(posenetOutput);
@@ -32,7 +32,7 @@ window.getModelsPredictions = async function getModelsPredictions() {
     // Prediction #1: run input through posenet
     // estimatePose can take in an image, video or canvas html element
     var { pose, posenetOutput } = await model2.estimatePose(
-        window.webcam.canvas
+        canvas
     );
     // Prediction 2: run input through teachable machine classification model
     //console.log(posenetOutput);
