@@ -11,12 +11,12 @@ class ViewHome extends React.Component {
     
 
     render() {
-        
+      <div>
         const temp = this.state.galleryArray.map((forGal) =>
             <li>{forGal}</li>);
         return (
             <React.Fragment>
-            <h1 style={{ color: "white", textAlign: "center" }}>Gallery</h1>
+            <h1 style={{ color: "white", textAlign: "center" }}>The Locker Room</h1>
         <div
           className="App App-header"
           padding="100px"
@@ -34,6 +34,7 @@ class ViewHome extends React.Component {
             
             </React.Fragment>
         )
+      </div>
     }
 
     addGallery(Gallery){
