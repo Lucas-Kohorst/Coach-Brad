@@ -4,8 +4,9 @@ import Gallery from "./components/Gallery"
 class ViewHome extends React.Component {
     constructor(props, galleryArray) {
       super(props);
-      this.state = {galleryArray: [<Gallery/>, <Gallery/>]}
+      this.state = {galleryArray: [<Gallery text={["hi","bye", "yo" ]} />, <Gallery/>]}
     }
+    // this.props.galleryArray = {[[<Gallery tex ]} />, <Gallery/>]]}
 
     
 

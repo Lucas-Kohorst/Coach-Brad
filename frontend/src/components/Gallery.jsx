@@ -18,7 +18,6 @@ const images = [
 export default class Gallery extends Component {
   constructor(props) {
     super(props);
- 
     this.state = {
       photoIndex: 0,
       isOpen: false,
@@ -45,7 +44,7 @@ export default class Gallery extends Component {
                 photoIndex: (photoIndex + images.length - 1) % images.length,
               })
             }
-            imageCaption = "test"
+            imageCaption = {this.props.text[photoIndex]}
             imagePadding = "0"
             onMoveNextRequest={() =>
               this.setState({
