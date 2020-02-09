@@ -208,15 +208,6 @@ export default class Home extends React.Component {
                 paddingLeft: "1em"
               }}
             ></div>{" "}
-            <div>
-              {this.state.hash != "" && this.state.hash ? (
-                <Button variant="success" onClick={() => this.isplayGallery()}>
-                  See Results
-                </Button>
-              ) : (
-                ""
-              )}
-            </div>
           </div>
         </div>{" "}
         <div>
