@@ -4,6 +4,7 @@ import { Button } from "reactstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import firebase from "./utils/firebase";
 import "bootstrap/dist/css/bootstrap.min.css";
+import ViewHome from "./ViewHome";
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -14,12 +15,14 @@ export default class Home extends React.Component {
       db: firebase.firestore(),
       storageRef: firebase.storage().ref(),
       hash: null,
-      url: ""
+      url: "",
+      images: null
     };
   }
 
   componentDidMount = () => {
     this.getAllData();
+    this.getAllStoredImages();
   };
 
   getFrame = async state => {
@@ -109,29 +112,30 @@ export default class Home extends React.Component {
   getAllStoredImages = () => {
     var projectRef = firebase.storage().ref("poses");
     var images = [];
-    projectRef.listAll().then(function(result) {
-      console.log(result);
-      for (var i in result.items) {
-        images.push(result.items[i].fullPath);
-      }
-    });
-    console.log(images);
+    projectRef
+      .listAll()
+      .then(function(result) {
+        console.log(result);
+        for (var i in result.items) {
+          images.push(result.items[i].fullPath);
+        }
+        console.log(images.length);
+        this.setState({
+          images: images
+        });
+      })
+      .then(function(images) {
+        this.setState({
+          images: images
+        });
+      });
   };
 
-  getDataFromImage;
-
-  displayImageFromPath = path => {
+  displayImageFromPath = async path => {
     var ref = this.state.storageRef.child(path);
     console.log(ref);
-    ref.getDownloadURL().then(function(url) {
-      console.log(url);
-      return url
-    });
-  };
-
-  componentWillMount = () => {
-   var u = this.displayImageFromPath("poses/image15812423341210.6006357473938830");
-   console.log(u)
+    var url = await ref.getDownloadURL();
+    return url;
   };
 
   getImageFromData = async hash => {
@@ -174,8 +178,14 @@ export default class Home extends React.Component {
         <h1 style={{ color: "white", textAlign: "center" }}>
           {" "}
           Analyze your shot{" "}
-        </h1>{" "}
-        <img src={this.state.url} alt=""/>
+        </h1>
+        <img
+          src={
+            "https://firebasestorage.googleapis.com/v0/b/coach-brad.appspot.com/o/poses%2F" +
+            "image15812423341210.6006357473938830" +
+            "?alt=media&token=9553b4cf-392f-4598-aae2-1ac4f136a3b0"
+          }
+        ></img>
         <div
           className="App App-header"
           style={{
@@ -244,6 +254,7 @@ export default class Home extends React.Component {
             </Button>{" "}
           </div>{" "}
         </div>{" "}
+        <ViewHome all={this.state.images} />
       </React.Fragment>
     );
   }
