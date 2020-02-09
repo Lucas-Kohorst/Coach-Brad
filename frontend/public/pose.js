@@ -27,9 +27,7 @@ window.getModelsPredictions = async function getModelsPredictions() {
     );
     // Prediction 2: run input through teachable machine classification model
     //console.log(posenetOutput);
-    console.log(posenetOutput)
     const prediction1 = await model1.predict(posenetOutput);
-    console.log(prediction1);
 
     // Prediction #1: run input through posenet
     // estimatePose can take in an image, video or canvas html element
@@ -39,15 +37,6 @@ window.getModelsPredictions = async function getModelsPredictions() {
     // Prediction 2: run input through teachable machine classification model
     //console.log(posenetOutput);
     const prediction2 = await model2.predict(posenetOutput);
-    console.log(prediction2)
-    console.log(
-        prediction1[0].probability.toFixed(2) + "\n" +
-        prediction1[1].probability.toFixed(2) + "\n" +
-        prediction1[2].probability.toFixed(2) + "\n" +
-        prediction2[0].probability.toFixed(2) + "\n" +
-        prediction2[1].probability.toFixed(2) + "\n" +
-        prediction2[2].probability.toFixed(2)
-    );
     return {
         prediction0: prediction1[0].probability.toFixed(2),
         prediction1: prediction1[1].probability.toFixed(2),
