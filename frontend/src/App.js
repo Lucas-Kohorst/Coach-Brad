@@ -4,6 +4,7 @@ import VideoRecorder from "react-video-recorder";
 import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
 import firebase from "./utils/firebase";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 class App extends React.Component {
   constructor(props) {
@@ -45,6 +46,11 @@ class App extends React.Component {
       });
   };
 
+  handleClick = (url) => {
+    window.URL = url;
+    window.init();
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -77,6 +83,10 @@ class App extends React.Component {
             id="label-container"
             style={{ color: "white", paddingTop: "20vh", paddingLeft: "1em" }}
           ></div>
+        </div>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Button className="m-3" onClick={() => this.handleClick("https://teachablemachine.withgoogle.com/models/SrWBV53a/")}>Elbow</Button>
+          <Button className="m-3" onClick={() => this.handleClick("https://teachablemachine.withgoogle.com/models/kE9ERP1y/")}>Legs</Button>
         </div>
       </React.Fragment>
     );
